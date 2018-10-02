@@ -39,6 +39,7 @@ view: production_combined {
   }
 
   dimension: area {
+    label: "Country"
     type: string
     sql: ${TABLE}.area ;;
   }
@@ -103,6 +104,7 @@ view: production_combined {
   }
 
   measure: sum_value {
+    label: "Total"
     type: sum
     sql: ${value} ;;
   }
