@@ -107,6 +107,7 @@ view: production_combined {
     label: "Total"
     type: sum
     sql: ${value} ;;
+    drill_fields: [item,sum_value]
   }
   measure: count {
     type: count
