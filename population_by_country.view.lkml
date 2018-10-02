@@ -7,7 +7,7 @@ derived_table: {
     SELECT CONCAT(cast(area_code as string), ' ', cast(item_code as string), ' ', cast(element_code as string), ' ', cast(year_code as string)) as prim_key, area_code, area, item_code, item, element_code, element, year_code, year, value * 1000 as population
     FROM `lookerdata.un_data.population`
 
-    WHERE area NOT LIKE '%World%' AND area NOT LIKE '%Polynesia%'
+    WHERE (area NOT LIKE '%Polynesia%'
     AND area NOT LIKE '%Micronesia%' AND area NOT LIKE '%Melanesia%'
     AND area NOT LIKE '%Australia & New Zealand%' AND area NOT LIKE '%Oceania%'
     AND area NOT LIKE '%Europe%' AND area NOT LIKE '%Asia'
@@ -18,7 +18,8 @@ derived_table: {
     AND area NOT LIKE '%Small Island%' AND area NOT LIKE '%Land Locked%'
     AND area NOT LIKE '%China,%' AND area NOT LIKE '%Oceana%'
     AND area NOT LIKE '%Channel Islands%' AND area NOT LIKE '%Virgin Islands%'
-    AND area NOT LIKE '%Least Dev%';;
+    AND area NOT LIKE '%Least Dev%')
+    AND element LIKE '%Total Population - Both sexes%';;
 }
 
   dimension: prim_key {
@@ -74,6 +75,10 @@ dimension: population {
   sql: ${TABLE}.population ;;
 }
 
+measure: sum_population {
+  type: sum
+  sql: ${TABLE}.population ;;
+}
 measure: count {
   type: count
 }

@@ -1,7 +1,8 @@
-view: emissions_agriculture {
+view: emissions_aggriculture_rank_dt {
   derived_table: {
     sql:
-          SELECT * FROM (
+          SELECT year, sum(value) as world_total_emissions_yearly, 258913379.3902 as world_total_emissions
+          FROM (SELECT * FROM (
           SELECT *, "Burning Crop Residues" as emission_type FROM `lookerdata.un_data.emissions_agriculture_burning_crop_residues`
           UNION ALL
           SELECT *, "Burning Savanna" as emission_type FROM `lookerdata.un_data.emissions_agriculture_burning_savanna`
@@ -46,90 +47,23 @@ view: emissions_agriculture {
                                 'Chickens, layers','Chickens, broilers','Cattle, non-dairy','Cattle, dairy',
                                 'Camels and Llamas','All Animals','All Crops','Savanna and woody savanna',
                                 'Closed and open shrubland','Burning - all categories','Cropland and grassland organic soils')
-
-          AND element LIKE '%Emissions (CO2eq) (%';;
-  }
-
-  dimension: country {
-    type: string
-    sql: ${TABLE}.area ;;
-    map_layer_name: countries
-    link: {
-      label: "Country Dashboard"
-      url: "/dashboards/233"
-    }
-  }
-
-  dimension: area_code {
-    type: number
-    sql: ${TABLE}.area_code ;;
-  }
-
-  dimension: element {
-    type: string
-    sql: ${TABLE}.element ;;
-  }
-
-  dimension: element_code {
-    hidden: yes
-    type: number
-    sql: ${TABLE}.element_code ;;
-  }
-
-  dimension: flag {
-    type: string
-    sql: ${TABLE}.flag ;;
-  }
-
-  dimension: item {
-    type: string
-    sql: ${TABLE}.item ;;
-  }
-
-  dimension: item_code {
-    type: number
-    sql: ${TABLE}.item_code ;;
-  }
-
-  dimension: unit {
-    type: string
-    sql: ${TABLE}.unit ;;
-  }
-
-  dimension: value {
-    type: number
-    sql: ${TABLE}.value ;;
+          AND element LIKE '%Emissions (CO2eq) (%')
+          WHERE area = 'World'
+          GROUP BY year ;;
   }
 
   dimension: year {
+    primary_key: yes
     type: number
     sql: ${TABLE}.year ;;
   }
-
-  dimension: year_code {
+  dimension: world_total_emissions_yearly {
     type: number
-    sql: ${TABLE}.year_code ;;
+    sql: ${TABLE}.world_total_emissions_yearly ;;
   }
-
-  dimension: emission_type {
-    type: string
-    sql: ${TABLE}.emission_type ;;
-  }
-
-  measure: count {
-    type: count
-    drill_fields: []
-  }
-
-  measure: total_emissions {
-    type: sum
-    sql: ${TABLE}.value ;;
-    drill_fields: [emission_type, total_emissions]
-  }
-
-  measure: percent_of_total_emissions {
+  dimension: world_total_emissions {
     type: number
-    sql: ${total_emissions} / ${emissions_aggriculture_rank_dt.world_total_emissions} ;;
-    value_format_name: percent_1
+    sql: ${TABLE}.world_total_emissions ;;
   }
-}
+
+  }

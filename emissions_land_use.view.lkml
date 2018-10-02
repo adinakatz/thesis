@@ -69,7 +69,7 @@ view: emissions_land_use{
     sql: ${TABLE}.year_code ;;
   }
 
-  dimension: type {
+  dimension: emission_type {
     type: string
     sql: ${TABLE}.emission_type ;;
   }
@@ -79,4 +79,8 @@ view: emissions_land_use{
     drill_fields: []
   }
 
+  measure: sum_value {
+    type: sum
+    sql: ${TABLE}.value ;;
+  }
 }

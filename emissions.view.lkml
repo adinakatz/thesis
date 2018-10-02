@@ -1,10 +1,16 @@
 view: emissions {
   derived_table: {
     sql:
-      SELECT *, "Argticulture" as category FROM `lookerdata.un_data.emissions_agriculture_total`
+      SELECT CONCAT(cast(area_code as string), ' ', cast(item_code as string), ' ', cast(element_code as string), ' ', cast(year_code as string)) as prim_key, *, "Agriculture" as category FROM `lookerdata.un_data.emissions_agriculture_total`
       UNION ALL
-      SELECT *, "Land Use" as category FROM `lookerdata.un_data.emissions_land_use_total`
+      SELECT CONCAT(cast(area_code as string), ' ', cast(item_code as string), ' ', cast(element_code as string), ' ', cast(year_code as string)) as prim_key, *, "Land Use" as category FROM `lookerdata.un_data.emissions_land_use_total`
     ;;
+  }
+
+  dimension: prim_key {
+    hidden: yes
+    primary_key: yes
+    sql: ${TABLE}.prim_key ;;
   }
 
   dimension: area {
